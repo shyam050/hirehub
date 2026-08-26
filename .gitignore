@@ -1,4 +1,17 @@
+# Environment local files
 .env.local
-node_modules
-dist
-src/convex/_generated
+.env.*.local
+.env
+
+# Dependencies & Build Outputs
+node_modules/
+dist/
+build/
+src/convex/_generated/
+target/
+
+# OS / IDE specific
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
