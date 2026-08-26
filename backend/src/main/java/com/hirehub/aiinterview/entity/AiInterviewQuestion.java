@@ -35,7 +35,7 @@ public class AiInterviewQuestion {
     @Column(nullable = false)
     private QuestionCategory category;
 
-    @Column(name = "expected_topics")
+    @Column(name = "expected_topics", columnDefinition = "jsonb")
     private String expectedTopics = "[]";
 
     @Column(name = "student_answer", columnDefinition = "text")
@@ -44,19 +44,21 @@ public class AiInterviewQuestion {
     @Column
     private Integer score;
 
-    @Column
+    @Column(name = "strengths", columnDefinition = "jsonb")
     private String strengths = "[]";
 
-    @Column
+
+    @Column(name = "weaknesses", columnDefinition = "jsonb")
     private String weaknesses = "[]";
+
 
     @Column(columnDefinition = "text")
     private String feedback;
 
-    @Column(name = "missing_concepts")
+    @Column(name = "missing_concepts", columnDefinition = "jsonb")
     private String missingConcepts = "[]";
 
-    @Column(name = "ideal_answer_points")
+    @Column(name = "ideal_answer_points", columnDefinition = "jsonb")
     private String idealAnswerPoints = "[]";
 
     @Column(name = "created_at", nullable = false, updatable = false)
