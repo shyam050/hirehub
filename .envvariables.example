@@ -1,0 +1,37 @@
+# HireHub Environment Variables
+# Copy this file to .env and fill in your values.
+# NEVER commit .env to version control.
+
+SPRING_PROFILES_ACTIVE=dev
+
+DB_URL=jdbc:postgresql://localhost:5432/hirehub_dev
+DB_USERNAME=hirehub
+DB_PASSWORD=hirehub_dev
+
+JWT_SECRET=
+JWT_ACCESS_EXPIRATION_MS=900000
+JWT_REFRESH_EXPIRATION_MS=604800000
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-4o
+OPENAI_BASE_URL=https://api.openai.com
+
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+S3_BUCKET=hirehub-resumes
+
+CORS_ORIGINS=http://localhost:5173
+
+RATE_LIMIT_ENABLED=true
+RATE_LIMIT_AUTH_MAX=10
+RATE_LIMIT_AI_MAX=5
+RATE_LIMIT_WINDOW_SECONDS=60
+
+FILE_STORAGE_TYPE=local
+FILE_STORAGE_PATH=./uploads/resumes

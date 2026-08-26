@@ -1,0 +1,79 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:hirehub_test;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+  flyway:
+    enabled: false
+
+cors:
+  allowed-origins: http://localhost:5173
+
+file:
+  storage:
+    type: local
+    base-path: /tmp/hirehub-test-uploads
+
+jwt:
+  secret: dGVzdC1zZWNyZXQta2V5LWZvci11bml0LXRlc3RzLW9ubHktMzJiaXQ=
+  access-token-expiration-ms: 900000
+  refresh-token-expiration-ms: 604800000
+
+ai:
+  openai:
+    api-key: test-key-not-real
+    model: gpt-4o
+  analysis:
+    cache-days: 7
+
+oauth:
+  google:
+    client-id: test-google-client-id
+    client-secret: test-google-client-secret
+  github:
+    client-id: test-github-client-id
+    client-secret: test-github-client-secret
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+rate-limit:
+  enabled: false
+
+# Disable resilience4j in tests
+resilience4j:
+  circuitbreaker:
+    instances:
+      aiService:
+        sliding-window-size: 5
+        minimum-number-of-calls: 2
+        failure-rate-threshold: 100
+        register-health-indicator: false
+  retry:
+    instances:
+      aiService:
+        max-attempts: 1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.hirehub: WARN
+    io.github.resilience4j: WARN

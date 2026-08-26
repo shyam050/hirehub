@@ -1,0 +1,149 @@
+spring:
+  application:
+    name: hirehub-backend
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: false
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  # HikariCP connection pool
+  datasource:
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:20}
+      minimum-idle: ${DB_POOL_MIN:5}
+      connection-timeout: ${DB_POOL_TIMEOUT_MS:30000}
+      idle-timeout: ${DB_POOL_IDLE_TIMEOUT_MS:600000}
+      max-lifetime: ${DB_POOL_MAX_LIFETIME_MS:1800000}
+      leak-detection-threshold: ${DB_POOL_LEAK_THRESHOLD_MS:60000}
+      pool-name: HireHubPool
+
+server:
+  port: 8080
+  shutdown: graceful
+  error:
+    include-stacktrace: never
+    include-message: never
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+      roles: ADMIN
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: hirehub-backend
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5,0.75,0.95,0.99
+  info:
+    env:
+      enabled: true
+
+# CORS
+cors:
+  allowed-origins: ${CORS_ORIGINS:http://localhost:5173}
+
+# JWT
+jwt:
+  secret: ${JWT_SECRET:}
+  access-token-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS:900000}
+  refresh-token-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}
+
+# OAuth2
+oauth:
+  google:
+    client-id: ${GOOGLE_CLIENT_ID:}
+    client-secret: ${GOOGLE_CLIENT_SECRET:}
+  github:
+    client-id: ${GITHUB_CLIENT_ID:}
+    client-secret: ${GITHUB_CLIENT_SECRET:}
+
+# AI
+ai:
+  openai:
+    api-key: ${OPENAI_API_KEY:}
+    model: ${OPENAI_MODEL:gpt-4o}
+    base-url: ${OPENAI_BASE_URL:https://api.openai.com}
+  analysis:
+    cache-days: ${AI_CACHE_DAYS:7}
+    max-text-length: ${AI_MAX_TEXT_LENGTH:8000}
+
+# File storage
+file:
+  storage:
+    type: ${FILE_STORAGE_TYPE:local}
+    base-path: ${FILE_STORAGE_PATH:./uploads/resumes}
+    s3:
+      bucket: ${S3_BUCKET:}
+      region: ${AWS_REGION:us-east-1}
+
+# Rate limiting
+rate-limit:
+  enabled: ${RATE_LIMIT_ENABLED:true}
+  auth-max: ${RATE_LIMIT_AUTH_MAX:10}
+  ai-max: ${RATE_LIMIT_AI_MAX:5}
+  window-seconds: ${RATE_LIMIT_WINDOW_SECONDS:60}
+
+# Resilience4j
+resilience4j:
+  circuitbreaker:
+    instances:
+      aiService:
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+        register-health-indicator: true
+  retry:
+    instances:
+      aiService:
+        max-attempts: 3
+        wait-duration: 1s
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - com.hirehub.ai.AiServiceException
+
+# Swagger (overridden per profile)
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+  packages-to-scan: com.hirehub
+
+# Logging
+logging:
+  level:
+    com.hirehub: INFO
+    org.hibernate.SQL: WARN
+    io.github.resilience4j: INFO

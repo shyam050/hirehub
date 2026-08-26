@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: hirehub_dev
+      POSTGRES_USER: hirehub
+      POSTGRES_PASSWORD: hirehub_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hirehub -d hirehub_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_URL: jdbc:postgresql://postgres:5432/hirehub_dev
+      DB_USERNAME: hirehub
+      DB_PASSWORD: hirehub_dev
+      JWT_SECRET: ZG9ja2VyLXNlY3JldC1rZXktZm9yLWRldi1vbmx5LTMyYml0
+      CORS_ORIGINS: http://localhost:5173,http://localhost:3000
+      FILE_STORAGE_TYPE: local
+      RATE_LIMIT_ENABLED: "false"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

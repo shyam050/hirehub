@@ -1,0 +1,53 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/hirehub_dev}
+    username: ${DB_USERNAME:hirehub}
+    password: ${DB_PASSWORD:hirehub_dev}
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # Relaxed pool for dev
+  datasource.hikari:
+    maximum-pool-size: 10
+    minimum-idle: 2
+
+cors:
+  allowed-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
+
+# Local file storage
+file:
+  storage:
+    type: local
+    base-path: ./uploads/resumes
+
+# Swagger enabled in dev
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+# Relaxed resilience in dev
+resilience4j:
+  circuitbreaker:
+    instances:
+      aiService:
+        sliding-window-size: 10
+        minimum-number-of-calls: 3
+        failure-rate-threshold: 60
+  retry:
+    instances:
+      aiService:
+        max-attempts: 2
+
+logging:
+  level:
+    com.hirehub: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    io.github.resilience4j: DEBUG

@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        generate_statistics: false
+
+  # Production pool
+  datasource.hikari:
+    maximum-pool-size: ${DB_POOL_MAX:20}
+    minimum-idle: ${DB_POOL_MIN:5}
+    connection-timeout: 20000
+    idle-timeout: 300000
+    max-lifetime: 1200000
+
+cors:
+  allowed-origins: ${CORS_ORIGINS}
+
+# Production file storage
+file:
+  storage:
+    type: ${FILE_STORAGE_TYPE:s3}
+
+# Swagger disabled in production
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+logging:
+  level:
+    com.hirehub: INFO
+    org.hibernate.SQL: WARN
+    io.github.resilience4j: INFO
+    org.springframework.web: INFO
+    org.springframework.security: WARN
