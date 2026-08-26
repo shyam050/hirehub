@@ -30,7 +30,12 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.created(response));
     }
-
+    
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('RECRUITER')")
+    public ResponseEntity<ApiResponse<CompanyResponse>> getMyCompany(Authentication auth) {
+        return ResponseEntity.ok(ApiResponse.ok(companyService.getCompanyByAuth(auth)));
+    }
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CompanyResponse>> getCompany(@PathVariable UUID id) {
         return ResponseEntity.ok(ApiResponse.ok(companyService.getCompanyById(id)));
