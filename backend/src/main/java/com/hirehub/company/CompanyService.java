@@ -98,6 +98,18 @@ public class CompanyService {
         company = companyRepository.save(company);
         return toResponse(company);
     }
+    
+    public CompanyResponse getCompanyByAuth(Authentication auth) {
+        User user = findUserByEmail(auth.getName());
+        Recruiter recruiter = recruiterRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Recruiter profile", "userId", user.getId().toString()));
+
+        if (recruiter.getCompany() == null) {
+            throw new ResourceNotFoundException("Company profile not found for this recruiter");
+        }
+
+        return toResponse(recruiter.getCompany());
+    } 
 
     @Transactional
     public CompanyResponse approveCompany(Authentication auth, UUID companyId) {
