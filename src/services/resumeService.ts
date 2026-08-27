@@ -33,8 +33,13 @@ export interface ResumeAnalysis {
 
 export const resumeService = {
   async getMyResumes(): Promise<Resume[]> {
-    const res = await api.get("/resumes");
-    return unwrap<Resume[]>(res);
+    try {
+      const res = await api.get("/resumes");
+      const data = unwrap<Resume[]>(res);
+      return Array.isArray(data) ? data : [];
+    } catch {
+      return [];
+    }
   },
 
   async getResume(id: string): Promise<Resume> {
@@ -66,7 +71,7 @@ export const resumeService = {
       `${import.meta.env.VITE_API_URL || "/api/v1"}/resumes/${id}/download`,
       {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
-      }
+      },
     );
     if (!res.ok) throw new Error("Download failed");
     return res.blob();
@@ -79,8 +84,13 @@ export const resumeService = {
   },
 
   async getAnalysesForResume(resumeId: string): Promise<ResumeAnalysis[]> {
-    const res = await api.get(`/resumes/${resumeId}/analyses`);
-    return unwrap<ResumeAnalysis[]>(res);
+    try {
+      const res = await api.get(`/resumes/${resumeId}/analyses`);
+      const data = unwrap<ResumeAnalysis[]>(res);
+      return Array.isArray(data) ? data : [];
+    } catch {
+      return [];
+    }
   },
 
   async getLatestAnalysis(resumeId: string): Promise<ResumeAnalysis | null> {
@@ -95,7 +105,8 @@ export const resumeService = {
   async getMyAnalyses(): Promise<ResumeAnalysis[]> {
     try {
       const res = await api.get("/resume-analyses/me");
-      return unwrap<ResumeAnalysis[]>(res);
+      const data = unwrap<ResumeAnalysis[]>(res);
+      return Array.isArray(data) ? data : [];
     } catch {
       return [];
     }

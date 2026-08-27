@@ -18,14 +18,14 @@ export default function ResumesPage() {
   const fetchResumes = async () => {
     try {
       const data = await resumeService.getMyResumes();
-      setResumes(data);
+      setResumes(Array.isArray(data) ? data : []);
     } catch { setResumes([]); }
   };
 
   const fetchAnalyses = async () => {
     try {
       const data = await resumeService.getMyAnalyses();
-      setAnalyses(data);
+      setAnalyses(Array.isArray(data) ? data : []);
     } catch { setAnalyses([]); }
   };
 
