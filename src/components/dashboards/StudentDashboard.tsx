@@ -43,16 +43,21 @@ export function StudentDashboard() {
     });
   }, []);
 
-  const upcomingInterviews =
-    interviews?.filter(
-      (i) => i.status === "SCHEDULED" || i.status === "RESCHEDULED"
-    ) ?? [];
+// Safely default everything to arrays
+  const safeApplications = Array.isArray(applications) ? applications : [];
+  const safeInterviews = Array.isArray(interviews) ? interviews : [];
+  const safeMatches = Array.isArray(matches) ? matches : [];
+  const safeSkillGaps = Array.isArray(skillGaps) ? skillGaps : [];
+
+  const upcomingInterviews = safeInterviews.filter(
+    (i) => i.status === "SCHEDULED" || i.status === "RESCHEDULED"
+  );
 
   const stats = {
-    total: applications.length,
-    shortlisted: applications.filter((a) => a.stage === "SHORTLISTED").length,
-    applied: applications.filter((a) => a.stage === "APPLIED").length,
-    rejected: applications.filter((a) => a.stage === "REJECTED").length,
+    total: safeApplications.length,
+    shortlisted: safeApplications.filter((a) => a.stage === "SHORTLISTED").length,
+    applied: safeApplications.filter((a) => a.stage === "APPLIED").length,
+    rejected: safeApplications.filter((a) => a.stage === "REJECTED").length,
   };
 
   if (!loaded) {
