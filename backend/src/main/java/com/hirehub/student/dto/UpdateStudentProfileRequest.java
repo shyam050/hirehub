@@ -2,6 +2,7 @@ package com.hirehub.student.dto;
 
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import java.util.List;
 
 @Data
 public class UpdateStudentProfileRequest {
@@ -38,7 +39,7 @@ public class UpdateStudentProfileRequest {
     @Size(max = 500, message = "Portfolio URL must not exceed 500 characters")
     private String portfolio;
 
-    private String skills;
-    private String education;
-    private String projects;
+    private List<String> skills;
+    private List<String> education;
+    private List<String> projects;
 }
