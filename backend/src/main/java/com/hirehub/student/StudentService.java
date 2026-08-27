@@ -43,9 +43,15 @@ public class StudentService {
         if (request.getLinkedin() != null) student.setLinkedin(request.getLinkedin());
         if (request.getGithub() != null) student.setGithub(request.getGithub());
         if (request.getPortfolio() != null) student.setPortfolio(request.getPortfolio());
-        if (request.getSkills() != null) student.setSkills(request.getSkills()); // JSON string
-        if (request.getEducation() != null) student.setEducation(request.getEducation());
-        if (request.getProjects() != null) student.setProjects(request.getProjects());
+        if (request.getSkills() != null) {
+                student.setSkills(String.join(", ", request.getSkills()));
+        }
+        if (request.getEducation() != null) {
+            student.setEducation(String.join(", ", request.getEducation()));
+        }
+        if (request.getProjects() != null) {
+            student.setProjects(String.join(", ", request.getProjects()));
+        }
 
         // Update profile completion
         boolean complete = student.getUniversity() != null && !student.getUniversity().isBlank()
