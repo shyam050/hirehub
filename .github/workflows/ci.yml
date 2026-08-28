@@ -33,11 +33,6 @@ jobs:
   frontend:
     name: Frontend Check
     runs-on: ubuntu-latest
-    # Uncomment the following 3 lines if your frontend code is inside a 'frontend' folder:
-    # defaults:
-    #   run:
-    #     working-directory: frontend
-
     steps:
       - uses: actions/checkout@v4
 
