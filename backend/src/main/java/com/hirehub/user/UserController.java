@@ -10,8 +10,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import java.util.Map; 
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -32,10 +33,23 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.ok(userService.updateMe(auth.getName(), request)));
     }
 
+  
     @GetMapping("/stats")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Object>> getUserStats() {
-        return ResponseEntity.ok(ApiResponse.ok(userService.getUserStats()));
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getAdminStats() {
+        return ResponseEntity.ok(ApiResponse.ok(userService.getAdminStats()));
+    }
+
+    @GetMapping("/students")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllStudents() {
+        return ResponseEntity.ok(ApiResponse.ok(userService.getAllStudents()));
+    }
+
+    @GetMapping("/recruiters")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllRecruiters() {
+        return ResponseEntity.ok(ApiResponse.ok(userService.getAllRecruiters()));
     }
 
     @GetMapping("/{id}")
