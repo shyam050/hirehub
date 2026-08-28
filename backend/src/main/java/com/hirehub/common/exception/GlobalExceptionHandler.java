@@ -116,6 +116,29 @@ public class GlobalExceptionHandler {
                 "AI services are temporarily unavailable. Please try again later.", request);
     }
 
+    @ExceptionHandler(org.springframework.web.HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleMethodNotSupported(
+            org.springframework.web.HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.METHOD_NOT_ALLOWED, "Method Not Allowed", "METHOD_NOT_ALLOWED",
+                "The HTTP method " + ex.getMethod() + " is not supported for this endpoint", request);
+    }
+
+    @ExceptionHandler(org.springframework.web.servlet.NoHandlerFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoHandler(
+            org.springframework.web.servlet.NoHandlerFoundException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.NOT_FOUND, "Not Found", "NOT_FOUND",
+                "The requested endpoint was not found", request);
+    }
+
+    @ExceptionHandler(org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(
+            org.springframework.web.method.annotation.MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+        String paramName = ex.getName();
+        String invalidValue = ex.getValue() != null ? ex.getValue().toString() : "";
+        return buildResponse(HttpStatus.BAD_REQUEST, "Bad Request", "INVALID_PARAMETER",
+                "Invalid value for parameter '" + paramName + "': " + invalidValue, request);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(
             Exception ex, HttpServletRequest request) {
