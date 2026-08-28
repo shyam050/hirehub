@@ -24,6 +24,7 @@ import com.hirehub.jobmatching.repository.JobMatchRepository;
 import com.hirehub.resumeanalysis.repository.ResumeAnalysisRepository;
 import com.hirehub.recruiter.repository.RecruiterRepository;
 import com.hirehub.student.repository.StudentRepository;
+import com.hirehub.resume.repository.ResumeRepository;
 import com.hirehub.user.entity.User;
 import com.hirehub.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,6 +65,7 @@ class InterviewTests {
     @Autowired private AiInterviewQuestionRepository aiInterviewQuestionRepository;
     @Autowired private AiInterviewRepository aiInterviewRepository;
     @Autowired private ResumeAnalysisRepository analysisRepository;
+    @Autowired private ResumeRepository resumeRepository; 
     @Autowired private PasswordEncoder passwordEncoder;
 
     @BeforeEach
@@ -75,6 +77,7 @@ class InterviewTests {
         interviewRepository.deleteAll();
         notificationRepository.deleteAll();
         applicationRepository.deleteAll();
+        resumeRepository.deleteAll(); 
         refreshTokenRepository.deleteAll();
         jobRepository.deleteAll();
         recruiterRepository.deleteAll();
