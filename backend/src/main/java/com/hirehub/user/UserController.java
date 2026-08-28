@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import java.util.Map; 
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -29,6 +30,12 @@ public class UserController {
             Authentication auth,
             @Valid @RequestBody UpdateUserRequest request) {
         return ResponseEntity.ok(ApiResponse.ok(userService.updateMe(auth.getName(), request)));
+    }
+
+    @GetMapping("/stats")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Object>> getUserStats() {
+        return ResponseEntity.ok(ApiResponse.ok(userService.getUserStats()));
     }
 
     @GetMapping("/{id}")

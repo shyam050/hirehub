@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -36,6 +38,18 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id.toString()));
         return AuthService.toUserResponse(user);
+    }
+
+    public Map<String, Object> getUserStats() {
+        long totalUsers = userRepository.count();
+        long studentCount = userRepository.count(); 
+        long recruiterCount = 0; 
+
+        return Map.of(
+                "totalUsers", totalUsers,
+                "students", studentCount,
+                "recruiters", recruiterCount
+        );
     }
 
     private User findByEmail(String email) {
