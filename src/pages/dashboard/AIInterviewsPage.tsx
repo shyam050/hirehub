@@ -14,7 +14,10 @@ export default function AIInterviewsPage() {
 
   useEffect(() => {
     aiService.getMyInterviews()
-      .then(setInterviews)
+      .then((res) => {
+        const data = Array.isArray(res) ? res : (res as any)?.content || [];
+        setInterviews(data);
+      })
       .catch(() => setInterviews([]));
   }, []);
 
@@ -43,7 +46,7 @@ export default function AIInterviewsPage() {
         </Card>
       ) : (
         <div className="space-y-3">
-          {interviews.map((interview) => (
+          {(Array.isArray(interviews) ? interviews : []).map((interview) => (
             <Card key={interview.id} className="cursor-pointer hover:border-primary/20 transition-colors" onClick={() => navigate(interview.status === "COMPLETED" ? `/dashboard/ai-interviews/${interview.id}/report` : `/dashboard/ai-interviews/${interview.id}`)}>
               <CardContent className="flex items-center justify-between p-4">
                 <div>

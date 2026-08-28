@@ -11,7 +11,10 @@ export default function StudentInterviewsPage() {
 
   useEffect(() => {
     interviewService.getMyStudentInterviews()
-      .then(setInterviews)
+      .then((res) => {
+        const data = Array.isArray(res) ? res : (res as any)?.content || [];
+        setInterviews(data);
+      })
       .catch(() => setInterviews([]));
   }, []);
 
@@ -33,7 +36,7 @@ export default function StudentInterviewsPage() {
         </Card>
       ) : (
         <div className="space-y-4">
-          {interviews.map((interview) => (
+          {(Array.isArray(interviews) ? interviews : []).map((interview) => (
             <Card key={interview.id}>
               <CardContent className="p-5">
                 <div className="flex items-start justify-between gap-4">
