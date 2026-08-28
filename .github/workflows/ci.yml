@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '21'
           distribution: 'temurin'
@@ -33,6 +33,10 @@ jobs:
   frontend:
     name: Frontend Check
     runs-on: ubuntu-latest
+    # Uncomment the following 3 lines if your frontend code is inside a 'frontend' folder:
+    # defaults:
+    #   run:
+    #     working-directory: frontend
 
     steps:
       - uses: actions/checkout@v4
@@ -41,7 +45,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: bun
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
