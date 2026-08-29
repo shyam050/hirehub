@@ -1,5 +1,6 @@
 package com.hirehub.recruiter;
 
+import com.hirehub.common.enums.Role;
 import com.hirehub.common.exception.ResourceNotFoundException;
 import com.hirehub.recruiter.dto.RecruiterProfileResponse;
 import com.hirehub.recruiter.dto.UpdateRecruiterProfileRequest;
@@ -20,6 +21,16 @@ public class RecruiterService {
 
     public RecruiterProfileResponse getMyProfile(String email) {
         User user = findUserByEmail(email);
+
+        if (user.getRole() == Role.ADMIN) {
+            return RecruiterProfileResponse.builder()
+                    .userId(user.getId())
+                    .name(user.getName())
+                    .email(user.getEmail())
+                    .jobTitle("Administrator")
+                    .build();
+        }
+
         Recruiter recruiter = findRecruiterByUserId(user.getId());
         return toResponse(recruiter, user);
     }
@@ -27,6 +38,16 @@ public class RecruiterService {
     @Transactional
     public RecruiterProfileResponse updateMyProfile(String email, UpdateRecruiterProfileRequest request) {
         User user = findUserByEmail(email);
+
+        if (user.getRole() == Role.ADMIN) {
+            return RecruiterProfileResponse.builder()
+                    .userId(user.getId())
+                    .name(user.getName())
+                    .email(user.getEmail())
+                    .jobTitle("Administrator")
+                    .build();
+        }
+
         Recruiter recruiter = findRecruiterByUserId(user.getId());
 
         if (request.getJobTitle() != null) recruiter.setJobTitle(request.getJobTitle());
