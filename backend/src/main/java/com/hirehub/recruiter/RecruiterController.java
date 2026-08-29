@@ -18,13 +18,13 @@ public class RecruiterController {
     private final RecruiterService recruiterService;
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('RECRUITER')")
+    @PreAuthorize("hasAnyRole('RECRUITER', 'ADMIN')")
     public ResponseEntity<ApiResponse<RecruiterProfileResponse>> getMyProfile(Authentication auth) {
         return ResponseEntity.ok(ApiResponse.ok(recruiterService.getMyProfile(auth.getName())));
     }
 
     @PutMapping("/me")
-    @PreAuthorize("hasRole('RECRUITER')")
+    @PreAuthorize("hasAnyRole('RECRUITER', 'ADMIN')")
     public ResponseEntity<ApiResponse<RecruiterProfileResponse>> updateMyProfile(
             Authentication auth,
             @Valid @RequestBody UpdateRecruiterProfileRequest request) {
