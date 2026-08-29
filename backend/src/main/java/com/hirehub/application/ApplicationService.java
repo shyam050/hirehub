@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -279,5 +280,13 @@ public class ApplicationService {
                 .createdAt(app.getCreatedAt())
                 .updatedAt(app.getUpdatedAt())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ApplicationResponse> getAllApplications(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return applicationRepository.findAll(pageable).stream()
+                .map(ApplicationService::toResponse)
+                .toList();
     }
 }

@@ -18,7 +18,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -123,6 +125,13 @@ public class CompanyService {
         company.setApproved(true);
         company = companyRepository.save(company);
         return toResponse(company);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CompanyResponse> getAllCompanies() {
+        return companyRepository.findAll().stream()
+                .map(CompanyService::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional

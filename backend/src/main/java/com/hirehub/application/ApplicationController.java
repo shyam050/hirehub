@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -67,4 +68,13 @@ public class ApplicationController {
         return ResponseEntity.ok(ApiResponse.ok(
                 applicationService.updateStatus(auth, id, request)));
     }
+
+    @GetMapping("/api/v1/applications")
+    @PreAuthorize("hasRole('ADMIN')")   
+    public ResponseEntity<ApiResponse<List<ApplicationResponse>>> getAllApplications(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size) {
+        return ResponseEntity.ok(ApiResponse.ok(applicationService.getAllApplications(page, size)));
+    }
+    
 }
